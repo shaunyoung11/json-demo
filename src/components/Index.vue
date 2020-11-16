@@ -1,10 +1,13 @@
 <template>
   <div class="index">
+    <h2 class="page-title">{{ pageTitle }}</h2>
     <v-data-table
+      class="index-table"
       :headers="headers"
-      :items="students.info"
+      :items="usrInfo"
       :items-per-page="5"
     ></v-data-table>
+    <v-btn outlined @click="handleGetUserInfo">刷新数据</v-btn>
   </div>
 </template>
 
@@ -12,19 +15,8 @@
 export default {
   data() {
     return {
-      students: {
-        title: '简单的学生管理系统',
-        info: [
-          { name: 'aaa', age: 99, phone: '1234567' },
-          { name: 'bbb', age: 18, phone: '1235678' },
-          { name: 'ccc', age: 20, phone: '1245678' },
-          { name: 'ddd', age: 10, phone: '234678' },
-          { name: 'eee', age: 74, phone: '1234568' },
-          { name: 'fff', age: 18, phone: '12345678' },
-          { name: 'ggg', age: 58, phone: '1234678' },
-          { name: 'hhh', age: 30, phone: '1235678' }
-        ]
-      },
+      usrInfo: [],
+      pageTitle: '暂时还未获取到页面标题',
       headers: [
         {
           text: 'Name',
@@ -40,8 +32,32 @@ export default {
         }
       ]
     }
+  },
+  created() {
+    this.handleGetUserInfo()
+  },
+  methods: {
+    // 获取用户信息方法
+    handleGetUserInfo() {
+      this.$https.get('/shaunyoung/usr').then(res => {
+        console.log(res)
+        this.$data.usrInfo = res.data.info
+        this.$data.pageTitle = res.data.title
+      })
+    }
   }
 }
 </script>
 
-<style></style>
+<style scoped>
+.index {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.index-table {
+  width: 70%;
+}
+</style>
