@@ -7,7 +7,12 @@
       :items="usrInfo"
       :items-per-page="5"
     ></v-data-table>
-    <v-btn outlined @click="handleGetUserInfo">刷新数据</v-btn>
+    <div class="btn">
+      <v-btn outlined @click="handleGetUserInfo">刷新数据</v-btn>
+      <v-btn outlined @click="handleDisplayData">展示数据</v-btn>
+      <v-btn outlined @click="handleHideData">隐藏数据</v-btn>
+    </div>
+    <div class="data-box"></div>
   </div>
 </template>
 
@@ -44,6 +49,16 @@ export default {
         this.$data.usrInfo = res.data.info
         this.$data.pageTitle = res.data.title
       })
+    },
+    // 点击展示数据
+    handleDisplayData() {
+      this.$https.get('/shaunyoung/usr').then(res => {
+        document.querySelector('.data-box').innerHTML = JSON.stringify(res)
+      })
+    },
+    // 点击隐藏数据
+    handleHideData() {
+      document.querySelector('.data-box').innerHTML = ''
     }
   }
 }
